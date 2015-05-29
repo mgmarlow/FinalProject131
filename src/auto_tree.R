@@ -28,7 +28,6 @@ set.seed(2)
 
 # Training set, sample 75% of the data
 index <- sample(dim(safety.data)[1], size=floor(dim(safety.data)[1])*.75,
-                                              replace=F)
 # Take remaining for test set
 index.test <- setdiff(1:dim(safety.data)[1], index)
 
