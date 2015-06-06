@@ -13,16 +13,6 @@ dim(auto.data)
 
 # Remove non-numeric variables from the dataset
 safety.data <- subset(auto.data, select = -c(make))
-safety.data <- subset(safety.data, select = -c(normalized.losses))
-safety.data <- subset(safety.data, select = -c(fuel.system))
-safety.data <- subset(safety.data, select = -c(engine.type))
-safety.data <- subset(safety.data, select = -c(engine.location))
-safety.data <- subset(safety.data, select = -c(num.of.cylinders))
-safety.data <- subset(safety.data, select = -c(fuel.type))
-safety.data <- subset(safety.data, select = -c(aspiration))
-safety.data <- subset(safety.data, select = -c(num.doors))
-safety.data <- subset(safety.data, select = -c(body.style))
-safety.data <- subset(safety.data, select = -c(drive.wheels))
 dim(safety.data)
 
 # Remove unknown observations from the data
