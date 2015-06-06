@@ -15,8 +15,12 @@
 
 
 # Read data, assign variable names
-auto.data <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
-                   header=F, sep=",")
+#auto.data <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+#                   header=F, sep=",")
+
+setwd('C:/Users/Graham/Desktop/FinalProject131/data')
+auto.data <- read.csv('C:/Users/Graham/Desktop/FinalProject131/data/data_edited.csv',
+                      header=F)
 
 colnames(auto.data) = c(
   'symboling',
@@ -46,3 +50,4 @@ colnames(auto.data) = c(
   'highway.mpg',
   'price'
   )
+

@@ -2,7 +2,7 @@
 
 # Preliminaries
 # load required packages
-
+library(missMDA)
 
 # load data from 'data.R'
 setwd('C:/Users/Graham/Desktop/FinalProject131/src')
@@ -16,18 +16,12 @@ safety.data <- subset(auto.data, select = -c(make))
 dim(safety.data)
 
 # Remove unknown observations from the data
+new.data <- na.omit(safety.data)
+dim(new.data)
 
-
-# Assign Response and Predictor variables
-responseY <- as.matrix(safety.data[,1])
-predictorX <- as.matrix(safety.data[, 2:(dim(safety.data)[2])])
-
-# Principal Component Analysis using Correlation matrix
-pca <- princomp(predictorX, cor=T)
-
-
-# Divide data into test set and training set
-set.seed(2)
+# Create binary variable out of symboling, classifying risky and safe 
+symboling.binary <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
+new.data <- subset(new.data, select = -c(symboling))
 
 # Training set, sample 75% of the data
 index <- sample(dim(safety.data)[1], size=floor(dim(safety.data)[1])*.75,
