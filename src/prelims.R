@@ -1,8 +1,5 @@
-# Principal Component Analysis
-
 # Preliminaries
-# load required packages
-library(missMDA)
+# load and modify data; assign training set and test set
 
 # load data from 'data.R'
 setwd('C:/Users/Graham/Desktop/FinalProject131/src')
@@ -11,28 +8,35 @@ head(auto.data)
 dim(auto.data)
 
 
-# Remove non-numeric variables from the dataset
+# Data Modification
+####################
+# Remove make variable from data
 safety.data <- subset(auto.data, select = -c(make))
 dim(safety.data)
 
-# Remove unknown observations from the data
-new.data <- na.omit(safety.data)
+# Remove unknown/blank observations from the data
+new.data <- na.omit(safety.data) # remove all NA obs.
 dim(new.data)
 
 # Create binary variable out of symboling, classifying risky and safe 
 symboling.binary <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
+# Remove symboling variable from data
 new.data <- subset(new.data, select = -c(symboling))
 
+
+# Training and Test sets
+#########################
 # Training set, sample 75% of the data
-index <- sample(dim(safety.data)[1], size=floor(dim(safety.data)[1])*.75,
+index <- sample(dim(new.data)[1], size=floor(dim(new.data)[1])*.75)
 # Take remaining for test set
-index.test <- setdiff(1:dim(safety.data)[1], index)
+index.test <- setdiff(1:dim(new.data)[1], index)
+length(index) + length(index.test) # 159, equal to number of obs. 
 
 # Our two sets:
-train.set <- safety.data[index,]
+train.set <- new.data[index,]
 dim(train.set)
 
-test.set <- safety.data[index.test,]
+test.set <- new.data[index.test,]
 dim(test.set)
 
 
