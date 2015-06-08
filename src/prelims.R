@@ -22,21 +22,3 @@ dim(new.data)
 biSym <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
 # Remove symboling variable from data
 new.data <- subset(new.data, select = -c(symboling))
-
-
-# Training and Test sets
-#########################
-# Training set, sample 75% of the data
-index <- sample(dim(new.data)[1], size=floor(dim(new.data)[1])*.75)
-# Take remaining for test set
-index.test <- setdiff(1:dim(new.data)[1], index)
-length(index) + length(index.test) # 159, equal to number of obs. 
-
-# Our two sets:
-train.set <- new.data[index,]
-dim(train.set)
-
-test.set <- new.data[index.test,]
-dim(test.set)
-
-

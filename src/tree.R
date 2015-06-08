@@ -28,20 +28,41 @@ title('Classification Tree')
 # Model Validation
 ###################
 
-set.seed(2)
+set.seed(1)
 
+# Training and Test sets
+
+# Training set, sample 75% of the data
+index <- sample(dim(new.data)[1], size=floor(dim(new.data)[1])*.75)
+# Take remaining for test set
+index.test <- setdiff(1:dim(new.data)[1], index)
+length(index) + length(index.test) # 159, equal to number of obs. 
+
+# Our two sets:
+train.set <- new.data[index,]
+dim(train.set)
+
+test.set <- new.data[index.test,]
+dim(test.set)
+
+
+# Model Validation
 # Use training set and test set to evaluate our classification tree
 car.tree <- tree(biSym ~., data=tree.data, subset=index)
 
 # Predict on test set
-#tree.pred <- predict(car.tree, train.set, type='class')
+tree.pred <- predict(car.tree, test.set, type='class')
 
 # Confusion matrix
-#error <- table(tree.pred, test.set)
+error <- table(tree.pred, test.set)
+
+# Classification Error
+1 - sum(diag(error))/sum(error)
 
 
 # K-fold Cross Validation
 ##########################
+# Note that Cross Validation automatically declares training and test sets
 cv.car <- cv.tree(car.tree, FUN=prune.tree, K=10, method='misclass')
 cv.car
 
@@ -52,12 +73,11 @@ plot(cv.car$size, cv.car$dev, type='b',
      ylab='CV Misclassification Error',
      col='red')
 
-# Complexity
+# Complexity and Min. Error
 plot(cv.car$k, cv.car$dev, type='b', 
      xlab='Complexity',
      ylab='CV Misclassification Error',
      col='blue')
-
 # Get minimum error
 min.error <- which.min(cv.car$dev) # index of min. error
 abline(h = cv.car$dev[min.error], lty=2)
@@ -65,10 +85,11 @@ abline(v = cv.car$k[min.error], lty=2)
 
 
 # Prune tree
-prune.car <- prune.misclass(car.tree, best=5)
+prune.car <- prune.misclass(car.tree, best=6)
 plot(prune.car)
 text(prune.car, pretty=0, col='red', cex=0.8)
 title('Pruned Tree')
+
 
 # Classification Tree using Random Forest
 ##########################################
