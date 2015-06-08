@@ -19,7 +19,7 @@ new.data <- na.omit(safety.data) # remove all NA obs.
 dim(new.data)
 
 # Create binary variable out of symboling, classifying risky and safe 
-symboling.binary <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
+biSym <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
 # Remove symboling variable from data
 new.data <- subset(new.data, select = -c(symboling))
 
