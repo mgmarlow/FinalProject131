@@ -34,16 +34,45 @@ set.seed(2)
 car.tree <- tree(biSym ~., data=tree.data, subset=index)
 
 # Predict on test set
-tree.pred <- predict(car.tree, train.set, type='class')
+#tree.pred <- predict(car.tree, train.set, type='class')
 
 # Confusion matrix
-error <- table(tree.pred, test.set)
+#error <- table(tree.pred, test.set)
 
 
 # K-fold Cross Validation
 ##########################
+cv.car <- cv.tree(car.tree, FUN=prune.tree, K=10, method='misclass')
+cv.car
+
+# Plot
+# Misclassification error vs. number nodes
+plot(cv.car$size, cv.car$dev, type='b', 
+     xlab='Number of Nodes',
+     ylab='CV Misclassification Error',
+     col='red')
+
+# Complexity
+plot(cv.car$k, cv.car$dev, type='b', 
+     xlab='Complexity',
+     ylab='CV Misclassification Error',
+     col='blue')
+
+# Get minimum error
+min.error <- which.min(cv.car$dev) # index of min. error
+abline(h = cv.car$dev[min.error], lty=2)
+abline(v = cv.car$k[min.error], lty=2)
 
 
+# Prune tree
+prune.car <- prune.misclass(car.tree, best=5)
+plot(prune.car)
+text(prune.car, pretty=0, col='red', cex=0.8)
+title('Pruned Tree')
 
 # Classification Tree using Random Forest
 ##########################################
+
+
+
+
