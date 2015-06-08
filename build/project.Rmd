@@ -97,6 +97,7 @@ plot(car.tree)
 text(car.tree, pretty=0, cex=0.8, col='red')
 title('Classification Tree, Binary Recursive Partitioning')
 ```
+
 The binary recursive partitioning method involves partitioning the response variable (`symboling`) and choosing splits from the rest of the variables in the dataset. Splits are chosen based off of their impurity -- we wish to maximize the reduction in impurity based off of the variables. The splitting halts when the terminal nodes are too small or too few to be split.
 
 The classification tree in this case has 10 nodes, detailing these `7` variables: number of doors, bore, normalized losses, fuel system, wheel base, engine size, and stroke. Number of doors seems to be the most important variable, as it is the root of the tree. If the number of doors of a given car is *not* four, the car is very likely to be risky.
