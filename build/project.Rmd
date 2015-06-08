@@ -141,3 +141,46 @@ After validating the model using a training set and test set, we are left with a
 
 The second technique that I will use to create a classification tree is k-fold cross validation. This method will automatically create a training set and test set, based off of our original data. In effect, the process of training a tree and testing it will be repeated multiple times on slightly different subsets of our automobile dataset. The advantage to using this technique over recursive partitioning is reduced variability, due to the fact that we are predicting the fit of a model based off of a hypothetitical validation set.
 
+However, there is also a downside to using cross validation: one must declare a parameter `K` to judge their prediction. `K` is the number of folds that take place in the cross validation, and my choice of `K = 10` is fairly arbitrary, as it seems to be a good spot between having a large number of sample combinations (low `K`), and a low number of sample combinations (high `K`).
+
+```{r, echo=FALSE}
+# K-fold Cross Validation
+##########################
+# Note that Cross Validation automatically declares training and test sets
+cv.car <- cv.tree(car.tree, FUN=prune.tree, K=10, method='misclass')
+
+# Plot
+# Misclassification error vs. number nodes
+par(mfrow=c(2, 1))
+plot(cv.car$size, cv.car$dev, type='b', 
+     xlab='Number of Nodes',
+     ylab='CV Misclassification Error',
+     col='red')
+title('Cross Validation Exploratory Analysis')
+# Complexity and Min. Error
+plot(cv.car$k, cv.car$dev, type='b', 
+     xlab='Complexity',
+     ylab='CV Misclassification Error',
+     col='blue')
+
+# Get minimum error
+min.error <- which.min(cv.car$dev) # index of min. error
+abline(h = cv.car$dev[min.error], lty=2)
+abline(v = cv.car$k[min.error], lty=2)
+```
+
+Before continuing with the cross validation technique, it is important to examine an optimal level of `k`, or the number of nodes that the tree should have. Given the first plot, number of nodes vs. error, we can see that we attain the minimum error at `k = 6`. Therefore, we should use `6` nodes when we construct our tree. The importance of reducing the complexity of the model is demonstrated through the complexity vs. error plot, where a minimum error is attained by having the minimum amount of complexity.
+
+``` {r}
+# Prune tree
+par(mfrow=c(1, 1))
+prune.car <- prune.misclass(car.tree, best=6)
+plot(prune.car)
+text(prune.car, pretty=0, col='red', cex=0.8)
+title('Pruned Tree')
+summary(prune.car)
+```
+
+Given these estimations, we now form a new tree based upon the optimal number of nodes, `6`. This tree cuts out the less important variables from the model, while maintaining the ones that contribute most towards classifying riskiness. This tree demonstrates that all observations that have a number of doors different from four are classified as risky, which is fairly significant. The other important classifying variables include bore, normalized losses, wheel base, and engine size.
+
+The error for this tree is `5.8%`, significantly better than the binary recursive tree.
