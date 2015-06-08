@@ -71,7 +71,67 @@ Since there is a signicantly significant relationship between `price` and `symbo
 
 In this section, I will be performing a number of different classification trees using different classification methods.
 
+The first technique I will use is binary recursive partitioning. This is the most basic method out of the four that I will cover, and therefore results in the greatest misclassification error.
+
+```{r}
+# Load required packages
+library(tree)
+library(randomForest)
+library(ada)
+
+# Attach binary variable to dataset, remove symboling
+new.data <- subset(new.data, select = -c(symboling))
+tree.data <- data.frame(new.data, biSym)
+
+# Simple Classification Tree, no Model Evaluation
+##################################################
+# Generate tree using defaults
+car.tree <- tree(biSym ~., data=tree.data)
+summary(car.tree)
+
+# Plot the tree and labels
+par(mfrow=c(1, 1))
+plot(car.tree)
+text(car.tree, pretty=0, cex=0.8, col='red')
+title('Classification Tree, Binary Recursive Partitioning')
+```
+The binary recursive partitioning method involves partitioning the response variable (`symboling`) and choosing splits from the rest of the variables in the dataset. Splits are chosen based off of their impurity -- we wish to maximize the reduction in impurity based off of the variables. The splitting halts when the terminal nodes are too small or too few to be split.
+
+The classification tree in this case has 10 nodes, detailing these `7` variables: number of doors, bore, normalized losses, fuel system, wheel base, engine size, and stroke. Number of doors seems to be the most important variable, as it is the root of the tree. If the number of doors of a given car is *not* four, the car is very likely to be risky.
+
+The misclassification error rate for this tree is `6.289%`, which is surprising good for this method. 
 
 
+Next, I want to use model validation techniques to test the previous modelling technique and see whether or not we can prune it. This is accomplished through the use of a training set and a test set. I will use the training set, consisting of `75%` of the data, to model the data and a test set, consisting of the remaining data, to test the model.
 
+```{r}
+# Model Validation
+###################
+set.seed(1)
+# Training and Test sets
+# Training set, sample 75% of the data
+index <- sample(dim(new.data)[1], size=floor(dim(new.data)[1])*.75)
+# Take remaining for test set
+index.test <- setdiff(1:dim(new.data)[1], index)
 
+# Our two sets:
+train.set <- new.data[index,]
+
+symbol.test <- biSym[index.test]
+test.set <- new.data[index.test,]
+
+# Model Validation
+# Use training set and test set to evaluate our classification tree
+car.tree <- tree(biSym ~., data=tree.data, subset=index)
+
+# Predict on test set
+tree.pred <- predict(car.tree, test.set, type='class')
+
+# Confusion matrix
+error <- table(tree.pred, symbol.test)
+
+# Classification Error
+1 - sum(diag(error))/sum(error)
+```
+
+After validating the model using a training set and test set, we are left with a misclassification error of `10%`.
