@@ -42,6 +42,7 @@ length(index) + length(index.test) # 159, equal to number of obs.
 train.set <- new.data[index,]
 dim(train.set)
 
+symbol.test <- biSym[index.test]
 test.set <- new.data[index.test,]
 dim(test.set)
 
@@ -54,7 +55,7 @@ car.tree <- tree(biSym ~., data=tree.data, subset=index)
 tree.pred <- predict(car.tree, test.set, type='class')
 
 # Confusion matrix
-error <- table(tree.pred, test.set)
+error <- table(tree.pred, symbol.test)
 
 # Classification Error
 1 - sum(diag(error))/sum(error)
