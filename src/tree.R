@@ -10,7 +10,8 @@ setwd('C:/Users/Graham/Desktop/FinalProject131/src')
 source('prelims.R', local=TRUE)
 dim(new.data)
 
-# Attach binary variable to dataset
+# Attach binary variable to dataset, remove symboling
+new.data <- subset(new.data, select = -c(symboling))
 tree.data <- data.frame(new.data, biSym)
 
 

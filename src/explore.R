@@ -15,6 +15,11 @@ data <- data.frame(new.data, num.binary)
 hist(safety.data$symboling)
 title('Histogram of Symboling')
 
+# Distribution of symboling after removing blank observations
+hist(data$symboling)
+title('Histogram of Symboling, Removed Obs.')
+
+
 # Distribution of Binary variable
 hist(data$num.binary)
 title('Histogram of risky (0) and safe (1)')
@@ -25,6 +30,7 @@ plot(data$price, data$num.binary,
      ylab = 'Safety')
 title('Price vs. Safety')
 
-# Regression, price vs. safety
+# Simple linear regression, price vs. safety
 fit.price <- lm(data$num.binary ~ data$price)
 summary(fit.price)
+# It seems that price has a statistically significant impact on symboling
