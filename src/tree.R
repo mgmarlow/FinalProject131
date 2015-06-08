@@ -3,6 +3,7 @@
 # Load required packages
 library(tree)
 library(randomForest)
+library(ada)
 
 # load data from 'prelims.R'
 setwd('C:/Users/Graham/Desktop/FinalProject131/src')
@@ -102,3 +103,13 @@ importance(fit)
 
 # Plot the bootstrapped trees
 plot(fit)
+
+
+
+# Classification with Boosting
+###############################
+fit.boost <- ada(biSym ~., data=tree.data)
+fit.boost
+
+# Plot variable importance
+varplot(fit.boost)
