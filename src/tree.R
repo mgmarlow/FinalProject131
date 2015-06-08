@@ -7,7 +7,6 @@ library(randomForest)
 # load data from 'prelims.R'
 setwd('C:/Users/Graham/Desktop/FinalProject131/src')
 source('prelims.R', local=TRUE)
-dim(train.set) + dim(test.set)
 dim(new.data)
 
 # Attach binary variable to dataset
@@ -37,7 +36,7 @@ set.seed(1)
 index <- sample(dim(new.data)[1], size=floor(dim(new.data)[1])*.75)
 # Take remaining for test set
 index.test <- setdiff(1:dim(new.data)[1], index)
-length(index) + length(index.test) # 159, equal to number of obs. 
+length(index) + length(index.test) # 203, equal to number of obs. 
 
 # Our two sets:
 train.set <- new.data[index,]
