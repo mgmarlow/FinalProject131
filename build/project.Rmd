@@ -10,6 +10,7 @@ output: html_document
 
 
 # Data Description
+
 The data that I used for this project comes from the UCI Machine Learning Repository. The dataset is called `automobile` and contains `25` variables, the most important of which is `symboling`, the index of safety that this project will use to classify the data.
 
 ```{r, echo=FALSE}
@@ -49,3 +50,19 @@ hist(data$num.binary,
 Here is the histogram of the data with a a new binary variable, where "risky" autos are depicted as a `0` and "safe" autos are a `1`. This provides more insight into how the data is handled when I am forming trees, as I decide to use a binary variable over the vanilla symboling variable. To create this binary variable, I grouped all autos with a symboling `<= 0` as "safe", and all autos with symboling `> 0` as "risky".
 
 This new binary variable has more risky variables than safe variables, just as the other histograms demonstrate. However, because `0` is declared as "safe", there is a better balance between the two groupings.
+
+
+### Regression
+
+As an initial test of the data, I created a linear regression model around the variable that I thought contributed most to `symboling`, `price`.
+
+```{r}
+# Simple linear regression, price vs. safety
+fit.price <- lm(data$num.binary ~ data$price)
+summary(fit.price)
+```
+
+Since there is a signicantly significant relationship between `price` and `symboling` (in terms of the slope of the regression line), there is a strong possibility that `price` is a strong contributing factor to `symboling`. I will test this hypothesis later in the project to see if my prediction holds up to the actual classification.
+
+
+# Tree-based Methods
