@@ -23,5 +23,6 @@ dim(new.data)
 
 # Create binary variable out of symboling, classifying risky and safe 
 biSym <- ifelse(new.data$symboling <= 0, c('safe'), c('risky') )
+num.binary <- ifelse(new.data$symboling <= 0, 1, 0 )
 # Remove symboling variable from data
 new.data <- subset(new.data, select = -c(symboling))
