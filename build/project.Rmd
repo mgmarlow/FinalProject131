@@ -1,7 +1,39 @@
 ---
-title: "131 Final Project"
+title: "Safety Analysis of Automobiles"
 author: "Graham Marlow"
-date: "Friday, May 29, 2015"
+date: "June 8, 2015"
 output: html_document
 ---
+# Abstract
 
+# Introduction
+
+
+# Data Description
+The data that I used for this project comes from the UCI Machine Learning Repository. The dataset is called `automobile` and contains `25` variables, the most important of which is `symboling`, the index of safety that this project will use to classify the data.
+
+```{r, echo=FALSE}
+setwd('C:/Users/Graham/Desktop/FinalProject131/src')
+source('prelims.R', local=TRUE)
+data <- data.frame(new.data, num.binary)
+
+# Show distribution of symboling, vanilla data
+hist(safety.data$symboling,
+     xlab = 'Symboling',
+     ylab = 'Frequency',
+     main = 'Histogram of Symboling')
+```
+
+Above is a histogram of `symboling` from the vanilla dataset. As we can see from the distribution of frequencies, most of the observations are either `0` or positive, with only a very few vehicles being classified as completley safe in the negative values. Therefore, to balance the data for my analysis, I will count a `symboling` value of `0` as 'safe'.
+
+Additionally, due to the fact that the random forest method will not work with any blank or `NA` values, I removed all observations that contained such values.
+
+```{r, echo=FALSE}
+# Distribution of symboling after removing blank observations
+hist(data$symboling,
+     xlab = 'Symboling',
+     ylab = 'Frequency',
+     main = 'Histogram of Symboling, Partial Data')
+```
+
+Here is the new distribution of `symboling` values, in a new dataset with  all observations containing `NA` removed. There is not a whole lot of change happening between the two distributions, so I think that removing the observations that contain blank values is justified.
