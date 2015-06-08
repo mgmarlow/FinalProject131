@@ -71,6 +71,8 @@ Since there is a signicantly significant relationship between `price` and `symbo
 
 In this section, I will be performing a number of different classification trees using different classification methods.
 
+### Binary Recursive Partitioning
+
 The first technique I will use is binary recursive partitioning. This is the most basic method out of the four that I will cover, and therefore results in the greatest misclassification error.
 
 ```{r}
@@ -98,9 +100,6 @@ title('Classification Tree, Binary Recursive Partitioning')
 The binary recursive partitioning method involves partitioning the response variable (`symboling`) and choosing splits from the rest of the variables in the dataset. Splits are chosen based off of their impurity -- we wish to maximize the reduction in impurity based off of the variables. The splitting halts when the terminal nodes are too small or too few to be split.
 
 The classification tree in this case has 10 nodes, detailing these `7` variables: number of doors, bore, normalized losses, fuel system, wheel base, engine size, and stroke. Number of doors seems to be the most important variable, as it is the root of the tree. If the number of doors of a given car is *not* four, the car is very likely to be risky.
-
-The misclassification error rate for this tree is `6.289%`, which is surprising good for this method. 
-
 
 Next, I want to use model validation techniques to test the previous modelling technique and see whether or not we can prune it. This is accomplished through the use of a training set and a test set. I will use the training set, consisting of `75%` of the data, to model the data and a test set, consisting of the remaining data, to test the model.
 
@@ -134,4 +133,11 @@ error <- table(tree.pred, symbol.test)
 1 - sum(diag(error))/sum(error)
 ```
 
-After validating the model using a training set and test set, we are left with a misclassification error of `10%`.
+In the above code, I separated the original dataset into a training set and test set, modeled a tree from the training set, and compared it to a tree that is predicted based off of the test set. Error is calculated based off of comparing the predicted model (from the test set) to the response variable (in our case, `symboling`.)
+
+After validating the model using a training set and test set, we are left with a misclassification error of `10%`. Now, this isn't a horrible amount of error, but I think we can do better.
+
+### K-fold Cross Validation
+
+The second technique that I will use to create a classification tree is k-fold cross validation. This method will automatically create a training set and test set, based off of our original data. In effect, the process of training a tree and testing it will be repeated multiple times on slightly different subsets of our automobile dataset. The advantage to using this technique over recursive partitioning is reduced variability, due to the fact that we are predicting the fit of a model based off of a hypothetitical validation set.
+
