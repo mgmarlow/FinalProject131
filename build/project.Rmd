@@ -6,8 +6,10 @@ output: html_document
 ---
 # Abstract
 
+
 # Introduction
 
+- - -
 
 # Data Description
 
@@ -51,7 +53,6 @@ Here is the histogram of the data with a a new binary variable, where "risky" au
 
 This new binary variable has more risky variables than safe variables, just as the other histograms demonstrate. However, because `0` is declared as "safe", there is a better balance between the two groupings.
 
-
 ### Regression
 
 As an initial test of the data, I created a linear regression model around the variable that I thought contributed most to `symboling`, `price`.
@@ -65,4 +66,12 @@ summary(fit.price)
 Since there is a signicantly significant relationship between `price` and `symboling` (in terms of the slope of the regression line), there is a strong possibility that `price` is a strong contributing factor to `symboling`. I will test this hypothesis later in the project to see if my prediction holds up to the actual classification.
 
 
+
 # Tree-based Methods
+
+In this section, I will be performing a number of different classification trees using different classification methods.
+
+
+
+
+
