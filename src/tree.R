@@ -2,6 +2,7 @@
 
 # Load required packages
 library(tree)
+library(randomForest)
 
 # load data from 'prelims.R'
 setwd('C:/Users/Graham/Desktop/FinalProject131/src')
@@ -94,7 +95,9 @@ title('Pruned Tree')
 
 # Classification Tree using Random Forest
 ##########################################
+fit <- randomForest(biSym ~., data=tree.data)
+print(fit)
 
-
-
+# Error = 5%, Random forest is a much better technique
+importance(fit)
 
