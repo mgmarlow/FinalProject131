@@ -101,3 +101,5 @@ print(fit)
 # Error = 5%, Random forest is a much better technique
 importance(fit)
 
+# Plot the bootstrapped trees
+plot(fit)
