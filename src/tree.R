@@ -105,7 +105,6 @@ importance(fit)
 plot(fit)
 
 
-
 # Classification with Boosting
 ###############################
 fit.boost <- ada(biSym ~., data=tree.data)
