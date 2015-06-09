@@ -212,3 +212,31 @@ importance(fit)
 The above list shows all of the variables of the dataset and their respective importance values. A higher importance indicates the the variable is more useful in classifying whether or not an auto is risky or safe. The results from the random forest method are actually very similar to the results from the cross validation method, where number of doors, wheel base, and normalized losses are the most important variables to consider. However, unlike the cross validation model, our random forest model does not think that engine size is an important factor in determining riskiness. To further test the variables chosen, I will use the boosted method of classification.
 
 ### Boosting Method
+
+The boosting method, similar to random forests, uses a bootstrap process to simulate the creation of a large number of trees. However, unlike the random forest method, boosting gradually refits the data on each iteration, effectively improving it. Therefore, each new iteration is dependent on the previous. This makes for a computationally intensive, yet accurate classification.
+
+```{r}
+# Classification with Boosting
+###############################
+fit.boost <- ada(biSym ~., data=tree.data)
+fit.boost
+```
+
+The misclassification error for the boosting method is `5.7%`. This is not as good as the random forest method, so we will continue using that classification tree. However, it is important to note that the variables that the boosting method declares most important are very different from the random forest method.
+
+```{r}
+# Plot variable importance
+varplot(fit.boost)
+```
+
+In the boosting method, length, price, and weight are determined the three most important variables to classifying the data. This contrasts the other methods, where number of doors and normalized losses are among the most important variables.
+
+
+
+# Conclusion
+
+When classifying the automobile dataset by `symboling`, it seems that the random forest method provides the best results. The random forest classification tree resulted in a misclassification error of about `5%`, the lowest of the trees. Furthermore, the random forest method reduces variability due to bootstrapping, making it favorable to cross validation and binary partitioning methods.
+
+In terms of the most important variables, my initial prediction was incorrect. According to the random forest method, the most important variables when classifying riskiness were number of doors, normalized losses, and wheel base. Price ended up to be a rather unimportant variable in the classification process.
+
+To further the results from this project, more analysis could be conducted on what aspects of each of the major variables can be changed in order to yield safe results. For example, because we now know that normalized losses, wheel base, and number of doors are the most important variables when it comes to classifying an auto as safe, we could test what qualities of each of these variables should be changed in order to achieve a smaller risk rating. For example, if one wants to make a family-safe vehicle, the results of this project suggest that the vehicle should have four doors.
