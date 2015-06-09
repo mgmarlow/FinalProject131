@@ -2,7 +2,7 @@
 title: "Safety Analysis of Automobiles"
 author: "Graham Marlow"
 date: "June 8, 2015"
-output: pdf_document
+output: html_document
 ---
 
 # Abstract
@@ -200,7 +200,7 @@ summary(prune.car)
 
 Given these estimations, we now form a new tree based upon the optimal number of nodes, `6`. This tree cuts out the less important variables from the model, while maintaining the ones that contribute most towards classifying riskiness. This tree demonstrates that all observations that have a number of doors different from four are classified as risky, which is fairly significant. The other important classifying variables include bore, normalized losses, wheel base, and engine size.
 
-The error for this tree is `5.8%`, significantly better than the binary recursive tree.
+The error for this tree is `5.8%`, better than the binary recursive tree.
 
 ### Random Forest
 
@@ -214,14 +214,15 @@ plot(fit,
 print(fit)
 ```
 
-The plot above gives an illustration of all of the tree simulations and their respective errors. As the number of simulations increases, the amount of error decreases until it begins to normalize around a specific value, in this case, `5%`. The red dashed line represents the lower bound of the confidence interval around the error, and the green dashed line represents the upper bound.
+The plot above gives an illustration of all of the tree simulations and their respective errors. As the number of simulations increases, the amount of error decreases until it begins to normalize around a specific value, in this case, `5.03%`. The red dashed line represents the lower bound of the confidence interval around the error, and the green dashed line represents the upper bound.
 
-The end misclassification error of `5%` is better than the cross validation error, and supports the reasoning that simulating many trees gives a better result than using just one. Therefore, our preferred model in this project is the random forest model.
+The end misclassification error of `5.03%` is better than the cross validation error, and supports the reasoning that simulating many trees gives a better result than using just one. Therefore, our preferred model in this project is the random forest model.
 
 
 ```{r}
 # List importance
-importance(fit)
+varImpPlot(fit,
+           main = 'Variable Importance Plot')
 ```
 
 The above list shows all of the variables of the dataset and their respective importance values. A higher importance indicates that the variable is more useful in classifying whether or not an auto is risky or safe. The results from the random forest method are actually very similar to the results from the cross validation method, where number of doors, wheel base, and normalized losses are the most important variables to consider. However, unlike the cross validation model, our random forest model does not think that engine size is an important factor in determining riskiness. To further test the variables chosen, I will use the boosted method of classification.
