@@ -2,12 +2,50 @@
 title: "Safety Analysis of Automobiles"
 author: "Graham Marlow"
 date: "June 8, 2015"
-output: html_document
+output: pdf_document
 ---
+
 # Abstract
+The purpose of this project is to classify risky and safe cars based off of a number of attributes acquired from the "Automobile" data set. The methods that I use are primarily tree-based; I use four different classification trees and judge by the misclassification error which tree method is the best one to use. I begin with a standard binary recursive partitioning method and examine the tree based off of the most basic merits. From there, I partition the data into a training set and test set, and create a new tree based off of the training set. Using the `predict()` function from the `tree` library, I predict a different tree using the test set. I then proceed to use K-fold cross validation to make a newly pruned tree, and examine the error of this tree compared to the original, where I defined my own training and test sets. The next two methods that I use are bootstrapping methods, mainly random forests and boosting, which I compare to the pruned tree achieved during cross-validation. 
+
+At the end of all of the methods, it turns out that the Random Forests method produces the least amount of misclassification error. After examining the cross-validation error, it seems that the optimal amount of nodes for the classification tree is six. The variables that the Random Forest method declared most important for classifying risky vehicles are number of doors, normalized losses, wheel base, height, and length. The Random Forest method disproves my hypothesis that price would be the most important factor for determining the riskiness of a vehicle.
 
 
 # Introduction
+
+In this project I will be analyzing the safety ratings of various brands of cars and determine what variables are most important when classifying whether or not a car is risky. I will be using the automobile data set from the UC Irvine Machine Learning Repository, which consists of 205 observations and 26 variables. 24 of the variables account for a particular attribute of the vehicle (fuel-type, weight, price, stroke, etc.). The other two variables are the safety rating (called symboling) and the make of the vehicle (Audi, BMW, etc.). 
+
+### Goal
+The purpose of this project and its implications lies in the classification of risy and safe cars. By discovering which variables contribute most towards the classification of riskiness in automobiles, we can help make our cars safer across the board by knowing what attributes of vehicles to change.
+
+### Data Cleanup
+To properly work with this dataset, I removed the `make` variable from the data as there are too few observations in the dataset to classify such a wide variety of different brands of car. Additionally, `make` is the only variable that does not contribute to a physical attribute of a car. To use the Random Forest method of classification, I needed to remove all blank or `NA` attributes from the dataset. In order to have results that comparable across all classification techniques, I removed these observations from the data completely for every method.
+
+### Attributes
+Symboling is represented as an integer that falls within the set [-3, 3]. A value of -3 indicates that the vehicle is considered safe, whereas a value of +3 indicates that the vehicle is "risky". Since this is the response variable that we wish to classify, I changed it into a binary variable to make it easier to work with. I split the variable into "safe" cars, or cars that have a symboling within [-3, 0] and "risky" cars, or cars that have a symboling within [1, 3]. Due to the large amount of cars that are classified as "risky", I decided to classify neutral cars (cars with a symboling of 0) as safe. This will help balance out the data and make my more accurate.
+Normalized losses is another variable that is very important to the dataset, as it represents the relative average loss per payment per insured vehicle year. This loss is normalized for all vehicles that fall within a particular size classification.
+In an attempt to achieve the best possible classification given the dataset, `make` was the only variable that I removed completely from the dataset.
+
+### Methods
+I use several different tree-based classification methods.
+
+ 1. Binary recursive partitioning. This is to provide a very basic tree at the beginning of the analysis and gain a broad knowledge of the data.
+ 
+ 2. K-fold cross validation. I use this method to define a more accurate training and testing procedure in an attempt to minimize misclassification error.
+ 
+ 3. Random forests. This technique, while computationally expensive, is very powerful and typically provides better results than cross validation.
+ 
+ 4.	Boosting. Another powerful technique, this method and random forests both provide a very strong analysis. I use this technique to compare important variables attained during the random forests method.
+
+### Results
+The random forest method of classification ended up giving the lowest misclassification error. The method misclassified only `5%` of observations, which is extraordinarily low. Therefore, I believe that the mean tree produced by the random forest method provides a good method of classification. The boosting method came in a close second, with a misclassification error of `5.7%`. However, as I will note later in the project, the variables that the boosting method classified as important are vastly different from those of the random forest method. K-fold cross validation yielded a misclassification error of `10%`, still good, but not nearly as good as the random forest method.
+
+The variables that were classified as most important were: number of doors, wheel base, normalized losses, height, length, and curb weight. There is a significant drop in importance rating when advancing after normalized losses; number of doors, wheel base, and normalized losses all of a high importance rating of about 9, whereas the other notable variables in the dataset hover around 5. All other variables have ratings that are 2 or lower.
+
+Therefore, it seems that the number of doors, wheelbase, and normalized losses are the three most important attributes to keep in mind when determining the riskiness of an automobile. This makes sense, as when we look at a visualization of the number of doors vs. symboling index, there is a clear divide between two doors and four doors. Similar results can be drawn between symboling and normalized losses, as well as symboling and wheel base. Normalized losses is a noteworthy variable as it is normalize based off of the size classification of the specific observation, and a factor in this size classification is the number of doors.
+### Software and Packages Used
+For the analysis within this project, I used R. For the methods detailed above I used several different packages. These packages are `tree`, for the binary recursive tree method, `randomForest`, for the random forests method, and `ada`, for the boosting method.
+My dataset is found on UC Irvine's Machine Learning Repository, and is accredited to Jeffery C. Schlimmer. The data was donated in 1987. The sources for this data are outlined within my R code, as well as on the UCI page for the dataset.
 
 - - -
 
@@ -33,11 +71,11 @@ hist(data$symboling,
      main = 'Histogram of Symboling, Partial Data')
 ```
 
-Left is a histogram of `symboling` from the vanilla dataset. As we can see from the distribution of frequencies, most of the observations are either `0` or positive, with only a very few vehicles being classified as completley safe in the negative values. Therefore, to balance the data for my analysis, I will count a `symboling` value of `0` as 'safe'.
+Left is a histogram of `symboling` from the vanilla dataset. As we can see from the distribution of frequencies, most of the observations are either `0` or positive, with only a very few vehicles being classified as completely safe in the negative values. Therefore, to balance the data for my analysis, I will count a `symboling` value of `0` as 'safe'.
 
 Additionally, due to the fact that the random forest method will not work with any blank or `NA` values, I removed all observations that contained such values.
 
-The right histogram is the new distribution of `symboling` values, in a dataset with  all observations containing `NA` removed. There is not a whole lot of change happening between the two distributions, so I think that removing the observations that contain blank values is justified.
+The right histogram is the new distribution of `symboling` values, in a dataset with all observations containing `NA` removed. There is not a whole lot of change happening between the two distributions, so I think that removing the observations that contain blank values is justified.
 
 
 ```{r, echo=FALSE}
@@ -63,7 +101,7 @@ fit.price <- lm(data$num.binary ~ data$price)
 summary(fit.price)
 ```
 
-Since there is a signicantly significant relationship between `price` and `symboling` (in terms of the slope of the regression line), there is a strong possibility that `price` is a strong contributing factor to `symboling`. I will test this hypothesis later in the project to see if my prediction holds up to the actual classification.
+Since there is a significantly significant relationship between `price` and `symboling` (in terms of the slope of the regression line), there is a strong possibility that `price` is a strong contributing factor to `symboling`. I will test this hypothesis later in the project to see if my prediction holds up to the actual classification.
 
 
 
@@ -140,7 +178,7 @@ After validating the model using a training set and test set, we are left with a
 
 ### K-fold Cross Validation
 
-The second technique that I will use to create a classification tree is k-fold cross validation. This method will automatically create a training set and test set, based off of our original data. In effect, the process of training a tree and testing it will be repeated multiple times on slightly different subsets of our automobile dataset. The advantage to using this technique over recursive partitioning is reduced variability, due to the fact that we are predicting the fit of a model based off of a hypothetitical validation set.
+The second technique that I will use to create a classification tree is k-fold cross validation. This method will automatically create a training set and test set, based off of our original data. In effect, the process of training a tree and testing it will be repeated multiple times on slightly different subsets of our automobile dataset. The advantage to using this technique over recursive partitioning is reduced variability, due to the fact that we are predicting the fit of a model based off of a hypothetical validation set.
 
 However, there is also a downside to using cross validation: one must declare a parameter `K` to judge their prediction. `K` is the number of folds that take place in the cross validation, and my choice of `K = 10` is fairly arbitrary, as it seems to be a good spot between having a large number of sample combinations (low `K`), and a low number of sample combinations (high `K`).
 
@@ -199,7 +237,7 @@ plot(fit,
 print(fit)
 ```
 
-The plot above gives an illustration of all of the tree simulations and their respective errors. As the number of simulations increases, the amount of error decreases until it begins to normalize around a specific value, in this case, `5%`. The red dashed line represents the lower bound of the confidience interval around the error, and the green dashed line represents the upper bound.
+The plot above gives an illustration of all of the tree simulations and their respective errors. As the number of simulations increases, the amount of error decreases until it begins to normalize around a specific value, in this case, `5%`. The red dashed line represents the lower bound of the confidence interval around the error, and the green dashed line represents the upper bound.
 
 The end misclassification error of `5%` is better than the cross validation error, and supports the reasoning that simulating many trees gives a better result than using just one. Therefore, our preferred model in this project is the random forest model.
 
@@ -209,7 +247,7 @@ The end misclassification error of `5%` is better than the cross validation erro
 importance(fit)
 ```
 
-The above list shows all of the variables of the dataset and their respective importance values. A higher importance indicates the the variable is more useful in classifying whether or not an auto is risky or safe. The results from the random forest method are actually very similar to the results from the cross validation method, where number of doors, wheel base, and normalized losses are the most important variables to consider. However, unlike the cross validation model, our random forest model does not think that engine size is an important factor in determining riskiness. To further test the variables chosen, I will use the boosted method of classification.
+The above list shows all of the variables of the dataset and their respective importance values. A higher importance indicates that the variable is more useful in classifying whether or not an auto is risky or safe. The results from the random forest method are actually very similar to the results from the cross validation method, where number of doors, wheel base, and normalized losses are the most important variables to consider. However, unlike the cross validation model, our random forest model does not think that engine size is an important factor in determining riskiness. To further test the variables chosen, I will use the boosted method of classification.
 
 ### Boosting Method
 
