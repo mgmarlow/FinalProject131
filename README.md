@@ -1,3 +1,4 @@
+[Link to full paper](./build/project.pdf)
 # Introduction
 
 This project analyzes the safety ratings of various brands of cars and determines which car components are most important in determining safety risk. I will be using the automobile data set from the [UC Irvine Machine Learning Repository]( http://archive.ics.uci.edu/ml/), which consists of 205 observations and 26 variables. 24 of the variables account for a particular attribute of the vehicle, like fuel-type, weight, price, or stroke. The other two variables are the safety rating (called symboling) and the make of the vehicle (Audi, BMW, etc.). 
