@@ -1,12 +1,12 @@
 # Introduction
 
-In this project I will be analyzing the safety ratings of various brands of cars and determine what variables are most important when classifying whether or not a car is risky. I will be using the automobile data set from the UC Irvine Machine Learning Repository, which consists of 205 observations and 26 variables. 24 of the variables account for a particular attribute of the vehicle (fuel-type, weight, price, stroke, etc.). The other two variables are the safety rating (called symboling) and the make of the vehicle (Audi, BMW, etc.). 
+This project analyzes the safety ratings of various brands of cars and determines which car components are most important in determining safety risk. I will be using the automobile data set from the [UC Irvine Machine Learning Repository]( http://archive.ics.uci.edu/ml/), which consists of 205 observations and 26 variables. 24 of the variables account for a particular attribute of the vehicle, like fuel-type, weight, price, or stroke. The other two variables are the safety rating (called symboling) and the make of the vehicle (Audi, BMW, etc.). 
 
 ### Goal
-The purpose of this project and its implications lies in the classification of risky and safe cars. By discovering which variables contribute most towards the classification of riskiness, we can help make our cars safer across the board by knowing what attributes of vehicles to change.
+The purpose of this project is to classify car components by potential risk. By discovering which components contribute most towards the classification of riskiness, safety concerns can be targeted directly by manufacturers to minimize risk towards consumers.
 
 ### Data Cleanup
-To properly work with this dataset, I removed the `make` variable from the data as there are too few observations in the dataset to classify such a wide variety of different brands of car. Additionally, `make` is the only variable that does not contribute to a physical attribute of a car. 
+To properly work with this dataset, I removed the `make` variable from the data. There are too few observations in the dataset to classify such a wide variety of brands of car, therefore the make of car would be an inaccurate predictor. 
 
 To use the Random Forest method of classification, I needed to remove all blank or `NA` attributes from the dataset. In order to have results that are comparable across all classification techniques, I removed these observations from the data completely for all methods.
 
